@@ -1,7 +1,18 @@
 import { View, Text, Image, Pressable } from 'react-native'
-import React from 'react'
+import React, { useEffect } from 'react'
 
 const Splash = ({navigation}) => {
+
+  useEffect(() => {
+    // Redirect to Home after 2 seconds
+    const timer = setTimeout(() => {
+      navigation.navigate('Home');
+    }, 2000);
+
+    // Cleanup the timer if the component is unmounted
+    return () => clearTimeout(timer);
+  }, [navigation]);
+  
   const onPress = () =>{
     // alert("Hello")
     navigation.navigate('Home')

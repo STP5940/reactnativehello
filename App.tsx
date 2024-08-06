@@ -17,15 +17,13 @@ const App = () => {
         <Stack.Screen 
         name='Splash'
         component={Splash}
-        /* options={{title: 'Welcome Splash'}} */
         options={{headerShown: false}}
         />
         <Stack.Screen
           name="Home"
           component={Home}
-          options={{title: 'ATTRACTIONS LISTS'}}
+          options={{title: 'ATTRACTIONS LISTS', headerTitleAlign: 'center', headerBackVisible: false}}
         />
-        {/* <Stack.Screen name="Profile" component={ProfileScreen} /> */}
       </Stack.Navigator>
     </NavigationContainer>
   )
