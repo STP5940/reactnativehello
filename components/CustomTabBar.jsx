@@ -27,16 +27,16 @@ export default function CustomTabBar(props) {
 
   const confirmLogOut = () => {
     Alert.alert(
-      "Confirm Logout",
-      "Are you sure you want to log out?",
+      "โปรดยืนยัน",
+      "คุณต้องการออกจากระบบ",
       [
         {
-          text: "Cancel",
+          text: "ยกเลิก",
           onPress: () => console.log("Logout canceled"),
           style: "cancel"
         },
         {
-          text: "OK",
+          text: "ยืนยัน",
           onPress: () => {
             setModalVisible(false); // Close the modal
             // Handle log out logic here
@@ -108,7 +108,7 @@ const styles = StyleSheet.create({
   modalContent: {
     backgroundColor: 'white',
     borderRadius: 10,
-    padding: 20,
+    paddingLeft: 20,
     alignItems: 'flex-start',
   },
   modalItem: {

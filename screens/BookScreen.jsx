@@ -31,7 +31,7 @@ const FriendItem = ({ name, profilePic, online, country }) => (
 export default function BookScreen() {
   const [searchQuery, setSearchQuery] = useState('');
   const [filteredFriends, setFilteredFriends] = useState(initialFriendsData);
-  const [showOnlineOnly, setShowOnlineOnly] = useState(false);
+  const [showOnlineOnly, setShowOnlineOnly] = useState(true);
   const [tabBarHeight, setTabBarHeight] = useState(0);
 
   useEffect(() => {
@@ -88,17 +88,18 @@ const styles = StyleSheet.create({
     paddingLeft: 7,
     paddingRight: 7,
     marginBottom: 95,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: '#fff',
   },
   searchInput: {
-    height: 40,
+    height: 41,
     backgroundColor: '#e9e9e9', // Gray background
-    borderColor: '#ccc',
+    borderColor: '#e9e9e9',
     borderWidth: 1,
-    borderRadius: 10, // Rounded corners
+    borderRadius: 15, // Rounded corners
     paddingHorizontal: 15,
     marginBottom: 10,
-    fontSize: 16,
+    fontSize: 14,
+    textAlign: 'center',
   },
   filterContainer: {
     flexDirection: 'row',
@@ -108,19 +109,20 @@ const styles = StyleSheet.create({
   filterText: {
     fontSize: 16,
     marginRight: 10,
+    color: '#666', // Gray color for country text
   },
   item: {
     flexDirection: 'row',
     alignItems: 'center',
-    padding: 5,
+    paddingBottom: 13,
+    paddingTop: 13,
+    paddingLeft: 5,
     backgroundColor: 'white',
-    marginBottom: 4,
-    borderRadius: 4,
+    borderRadius: 5,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.2,
     shadowRadius: 2,
-    elevation: 2,
   },
   profileContainer: {
     flexDirection: 'row',
@@ -134,9 +136,9 @@ const styles = StyleSheet.create({
     position: 'relative',
   },
   statusIndicator: {
-    width: 12,
-    height: 12,
-    borderRadius: 6,
+    width: 15,
+    height: 15,
+    borderRadius: 10,
     borderWidth: 2,
     borderColor: 'white',
     position: 'absolute',
@@ -149,6 +151,7 @@ const styles = StyleSheet.create({
   name: {
     fontSize: 16,
     fontWeight: 'bold',
+    color: '#000', // Gray color for country text
   },
   country: {
     fontSize: 14,

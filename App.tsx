@@ -10,6 +10,8 @@ import SearchScreen from './screens/SearchScreen';
 import SettingsScreen from './screens/SettingsScreen';
 import BookScreen from './screens/BookScreen';
 import LoadingScreen from './screens/LoadingScreen';
+import ChatScreen from './screens/ChatScreen';
+
 import CustomTabBar from './components/CustomTabBar';
 
 const Tab = createBottomTabNavigator();
@@ -63,12 +65,12 @@ function MainTabs() {
       <Tab.Screen
         name="Settings"
         component={SettingsScreen}
-        options={{ title: 'Settings', headerTitleAlign: 'center' }}
+        options={{ title: 'ข้อความ', headerTitleAlign: 'left' }}
       />
       <Tab.Screen
         name="Book"
         component={BookScreen}
-        options={{ title: 'รายชื่อเพื่อน', headerTitleAlign: 'center' }}
+        options={{ title: 'เพื่อน', headerTitleAlign: 'left' }}
       />
     </Tab.Navigator>
   );
@@ -80,6 +82,8 @@ export default function App() {
       <Stack.Navigator initialRouteName="Loading">
         <Stack.Screen name="Loading" component={LoadingScreen} options={{ headerShown: false }} />
         <Stack.Screen name="Main" component={MainTabs} options={{ headerShown: false }} />
+        <Stack.Screen name="ChatScreen" component={ChatScreen} 
+        options={{ title: 'ChatScreen' }} />
       </Stack.Navigator>
     </NavigationContainer>
   );
@@ -88,10 +92,10 @@ export default function App() {
 const styles = StyleSheet.create({
   tabBar: {
     position: 'absolute',
-    bottom: 7,
+    bottom: 5,
     left: 3,
     right: 3,
-    borderRadius: 20,
+    borderRadius: 18,
     height: 60,
     backgroundColor: 'white',
     shadowColor: '#000',
