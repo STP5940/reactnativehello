@@ -1,13 +1,13 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, Image, TextInput, TouchableOpacity, KeyboardAvoidingView, ScrollView } from 'react-native';
+import React, { useState, useEffect, useRef } from 'react';
+import { View, Text, Alert, StyleSheet, Image, TextInput, TouchableOpacity, KeyboardAvoidingView, ScrollView } from 'react-native';
 
 export default function ChatScreen({ route, navigation }) {
   const { name, profilePic, online } = route.params;
   const [inputMessage, setInputMessage] = useState('');
   const [expandedMessageId, setExpandedMessageId] = useState(null);
 
- // Mockup messages
- const messages = [
+  // Mockup messages
+  const messages = [
     { id: '1', text: 'Hello!', timestamp: '08-07 12:30', isSender: false },
     { id: '2', text: 'Hi there, how are you?', timestamp: '08-07 12:31', isSender: true },
     { id: '3', text: 'I’m good, thanks for asking!', timestamp: '08-07 12:32', isSender: false },
@@ -24,17 +24,26 @@ export default function ChatScreen({ route, navigation }) {
     { id: '14', text: 'Hi there, how are you?', timestamp: '08-07 12:31', isSender: true },
   ];
 
+  const scrollViewRef = useRef(null);
+
   useEffect(() => {
     // Set the navigation header title and customize header
     navigation.setOptions({
       title: name,
       headerRight: () => (
-        <View style={styles.headerProfileContainer}>
+        <TouchableOpacity onPress={() => Alert.alert('','Coming soon...')}>
+          <View style={styles.headerProfileContainer}>
             <Image source={{ uri: 'https://cdn-icons-png.flaticon.com/512/12225/12225846.png' }} style={styles.headerProfilePic} />
-        </View>
+          </View>
+        </TouchableOpacity>
       ),
     });
   }, [name, profilePic, online, navigation]);
+
+  useEffect(() => {
+    // Scroll to the end of the chat when the component mounts
+    scrollViewRef.current?.scrollToEnd({ animated: false });
+  }, [messages]);
 
   const handleSend = () => {
     // Handle the send message logic here
@@ -50,18 +59,23 @@ export default function ChatScreen({ route, navigation }) {
     <KeyboardAvoidingView style={styles.container} behavior="padding">
       <View style={styles.header}>
         <View style={{ position: 'relative' }}>
-            <Image source={{ uri: profilePic }} style={styles.profilePic} />
-            {online && <View style={[styles.statusIndicator, { backgroundColor: 'green' }]} />}
+          <Image source={{ uri: profilePic }} style={styles.profilePic} />
+          {online && <View style={[styles.statusIndicator, { backgroundColor: 'green' }]} />}
         </View>
         <Text style={styles.name}>{name}</Text>
       </View>
-      <ScrollView style={styles.messageContainer} contentContainerStyle={styles.messageList}>
+      <ScrollView 
+        ref={scrollViewRef} 
+        style={styles.messageContainer} 
+        contentContainerStyle={styles.messageList}
+        onContentSizeChange={() => scrollViewRef.current?.scrollToEnd({ animated: true })}
+      >
         {messages.map((msg) => (
           <View key={msg.id} style={[styles.messageWrapper, msg.isSender ? styles.senderWrapper : styles.receiverWrapper]}>
             {!msg.isSender && 
             <View style={styles.messageHeader}>
-                <Image source={{ uri: profilePic }} style={styles.receiverProfilePic} />
-                <Text style={styles.nameInmessage}>{name}</Text>
+              <Image source={{ uri: profilePic }} style={styles.receiverProfilePic} />
+              <Text style={styles.nameInmessage}>{name}</Text>
             </View>
             }
             <TouchableOpacity onPress={() => toggleTimestamp(msg.id)}>
@@ -203,7 +217,7 @@ const styles = StyleSheet.create({
   inputContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    // borderTopWidth: 1,
+    borderTopWidth: 1,
     borderTopColor: '#ccc',
     padding: 10,
     backgroundColor: '#f5f5f5',

@@ -6,7 +6,7 @@ export default function LoadingScreen({ navigation }) {
   useEffect(() => {
     const timer = setTimeout(() => {
       navigation.replace('Main'); // เปลี่ยนจาก 'Home' เป็น 'Main'
-    }, 3000); // 3000 = 3 วินาทีสำหรับหน้าโหลด
+    }, 1000); // 3000 = 3 วินาทีสำหรับหน้าโหลด
 
     return () => clearTimeout(timer);
   }, [navigation]);
