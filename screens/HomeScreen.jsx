@@ -93,10 +93,10 @@ export default function HomeScreen() {
           />
           <View style={styles.buttonContainer}>
             <TouchableOpacity onPress={handleSwipeLeft} style={[styles.button, styles.leftButton]}>
-              <Image source={{ uri: 'https://cdn-icons-png.flaticon.com/512/2976/2976286.png' }} style={styles.buttonImage} />
+              <Image source={{ uri: 'https://cdn-icons-png.flaticon.com/512/2976/2976286.png' }} style={styles.leftButtonImage} />
             </TouchableOpacity>
             <TouchableOpacity onPress={handleSwipeRight} style={[styles.button, styles.rightButton]}>
-              <Image source={{ uri: 'https://cdn-icons-png.flaticon.com/512/1077/1077086.png' }} style={styles.buttonImage} />
+              <Image source={{ uri: 'https://cdn-icons-png.flaticon.com/512/1077/1077086.png' }} style={styles.rightButtonImage} />
             </TouchableOpacity>
           </View>
           {/* <View style={styles.buttonContainer}>
@@ -170,8 +170,8 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   button: {
-    paddingVertical: 14,
-    paddingHorizontal: 30,
+    paddingVertical: 10,
+    paddingHorizontal: 25,
     borderRadius: 25,
     backgroundColor: '#f73878',
   },
@@ -180,15 +180,22 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
   },
-  buttonImage: {
-    width: 30,
-    height: 30,
-    tintColor: '#fff'
+  leftButtonImage: {
+    width: 35,
+    height: 35,
+    tintColor: '#cfcacb',
+  },
+  rightButtonImage: {
+    width: 35,
+    height: 35,
+    tintColor: '#ff2b4f',
   },
   leftButton: {
-    backgroundColor: '#FF5252',
+    backgroundColor: '#474747',
+    // opacity: 0.5,
   },
   rightButton: {
-    backgroundColor: '#4CAF50',
+    backgroundColor: '#474747',
+    // opacity: 0.5,
   },
 });
