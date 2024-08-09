@@ -82,8 +82,7 @@ export default function App() {
       <Stack.Navigator initialRouteName="Loading">
         <Stack.Screen name="Loading" component={LoadingScreen} options={{ headerShown: false }} />
         <Stack.Screen name="Main" component={MainTabs} options={{ headerShown: false }} />
-        <Stack.Screen name="ChatScreen" component={ChatScreen} 
-        options={{ title: 'ChatScreen' }} />
+        <Stack.Screen name="ChatScreen" component={ChatScreen} options={{ title: 'ChatScreen' }} />
       </Stack.Navigator>
     </NavigationContainer>
   );

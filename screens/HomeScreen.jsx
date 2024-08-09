@@ -1,36 +1,124 @@
-// HomeScreen.js
-import React, { useEffect } from 'react';
-import { View, Text, BackHandler, Alert } from 'react-native';
-import { useIsFocused } from '@react-navigation/native';
+import React, { useState } from 'react';
+import { View, Text, Image, StyleSheet } from 'react-native';
+import { Gesture, GestureDetector } from 'react-native-gesture-handler';
+import Animated, { useSharedValue, useAnimatedStyle, withSpring, runOnJS } from 'react-native-reanimated';
 
 export default function HomeScreen() {
-  const isFocused = useIsFocused();
+  const [profiles, setProfiles] = useState([
+    { id: 1, name: 'Alice Tan', image: 'https://xsgames.co/randomusers/assets/avatars/female/1.jpg' },
+    { id: 3, name: 'Yuki Sato', image: 'https://xsgames.co/randomusers/assets/avatars/female/3.jpg' },
+    { id: 4, name: 'Lily Chen', image: 'https://xsgames.co/randomusers/assets/avatars/female/4.jpg' },
+    { id: 9, name: 'Nina Wong', image: 'https://xsgames.co/randomusers/assets/avatars/female/9.jpg' },
+  ]);
 
-  useEffect(() => {
-    const backAction = () => {
-      if (isFocused) { // Check if the screen is currently focused
-        Alert.alert("Exit App", "Are you sure you want to exit?", [
-          {
-            text: "Cancel",
-            onPress: () => null,
-            style: "cancel"
-          },
-          { text: "YES", onPress: () => BackHandler.exitApp() }
-        ]);
-        return true; // Prevent default back action
+  const translateX = useSharedValue(0);
+  const translateY = useSharedValue(0);
+
+  const handleSwipe = (profileId) => {
+    setProfiles((prevProfiles) => prevProfiles.filter((profile) => profile.id !== profileId));
+  };
+
+  const swipeGesture = Gesture.Pan()
+    .onUpdate((event) => {
+      translateX.value = event.translationX;
+      translateY.value = event.translationY;
+    })
+    .onEnd((event) => {
+      const threshold = 100; // Threshold for swipe to trigger the action
+      if (Math.abs(event.translationX) > threshold || Math.abs(event.translationY) > threshold) {
+        translateX.value = withSpring(event.translationX > 0 ? 500 : -500, {}, () => {
+          runOnJS(handleSwipe)(profiles[0].id);
+          translateX.value = 0; // Reset the position for the next card
+          translateY.value = 0; // Reset Y position
+        });
+      } else {
+        translateX.value = withSpring(0);
+        translateY.value = withSpring(0);
       }
-      return false; // Allow default back action if not focused
+    });
+
+  const animatedCardStyle = useAnimatedStyle(() => {
+    return {
+      transform: [{ translateX: translateX.value }, { translateY: translateY.value }],
+      opacity: withSpring(translateX.value === 0 && translateY.value === 0 ? 1 : 0.8),
     };
-
-    const backHandler = BackHandler.addEventListener("hardwareBackPress", backAction);
-
-    // Cleanup listener on unmount
-    return () => backHandler.remove();
-  }, [isFocused]); // Dependency array includes isFocused
+  });
 
   return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Text>Home Screen</Text>
+    <View style={styles.container}>
+      {profiles.map((profile, index) => (
+        <View key={profile.id} style={[styles.cardContainer, { zIndex: profiles.length - index }]}>
+          {index === 0 ? (
+            <GestureDetector gesture={swipeGesture}>
+              <Animated.View style={[styles.card, animatedCardStyle]}>
+                <Image source={{ uri: profile.image }} style={styles.image} />
+                <Text style={styles.name}>{profile.name}</Text>
+              </Animated.View>
+            </GestureDetector>
+          ) : (
+            <View style={[styles.card, styles.card]}>
+              <Image source={{ uri: profile.image }} style={styles.image} />
+              <Text style={styles.name}>{profile.name}</Text>
+            </View>
+          )}
+        </View>
+      ))}
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#fff',
+  },
+  cardContainer: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  card: {
+    width: '100%',
+    height: '86%',
+    borderRadius: 20,
+    overflow: 'hidden',
+    backgroundColor: '#f8f8f8',
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 5,
+    elevation: 5,
+    position: 'absolute',
+    // marginTop: '2%',
+    top: 13,
+    left: 0,
+  },
+  // cardOffset: {
+  //   zIndex: -1,
+  // },
+  image: {
+    width: '100%',
+    height: '100%',
+    borderTopLeftRadius: 10,
+    borderTopRightRadius: 10,
+  },
+  name: {
+    position: 'absolute',
+    bottom: 10,
+    left: 10,
+    fontSize: 35,
+    color: '#fff',
+    fontWeight: 'bold',
+    textShadowColor: '#000',
+    textShadowOffset: { width: 1, height: 1 },
+    textShadowRadius: 3,
+  },
+});
