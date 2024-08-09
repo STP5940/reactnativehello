@@ -1,21 +1,30 @@
 import React, { useState } from 'react';
-import { View, Text, Image, StyleSheet } from 'react-native';
+import { View, Text, Image, StyleSheet, Alert } from 'react-native';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import Animated, { useSharedValue, useAnimatedStyle, withSpring, runOnJS } from 'react-native-reanimated';
 
 export default function HomeScreen() {
   const [profiles, setProfiles] = useState([
-    { id: 1, name: 'Alice Tan', image: 'https://xsgames.co/randomusers/assets/avatars/female/1.jpg' },
-    { id: 3, name: 'Yuki Sato', image: 'https://xsgames.co/randomusers/assets/avatars/female/3.jpg' },
-    { id: 4, name: 'Lily Chen', image: 'https://xsgames.co/randomusers/assets/avatars/female/4.jpg' },
-    { id: 9, name: 'Nina Wong', image: 'https://xsgames.co/randomusers/assets/avatars/female/9.jpg' },
+    { id: 0, name: 'Alice Tan', image: 'https://xsgames.co/randomusers/assets/avatars/female/1.jpg' },
+    { id: 1, name: 'Yuki Sato', image: 'https://xsgames.co/randomusers/assets/avatars/female/3.jpg' },
   ]);
 
   const translateX = useSharedValue(0);
   const translateY = useSharedValue(0);
 
-  const handleSwipe = (profileId) => {
-    setProfiles((prevProfiles) => prevProfiles.filter((profile) => profile.id !== profileId));
+  const handleSwipe = () => {
+    console.log('Swipe detected');
+    console.log('Current profiles:', profiles);
+
+    // Alert.alert('Profile Swiped', 'You swiped the first profile!');
+
+    setProfiles((prevProfiles) => {
+      const newProfiles = [...prevProfiles.slice(1), prevProfiles[0]];
+      return newProfiles;
+    });
+
+    translateX.value = 0; // Reset X position for the next card
+    translateY.value = 0; // Reset Y position for the next card
   };
 
   const swipeGesture = Gesture.Pan()
@@ -27,9 +36,8 @@ export default function HomeScreen() {
       const threshold = 100; // Threshold for swipe to trigger the action
       if (Math.abs(event.translationX) > threshold || Math.abs(event.translationY) > threshold) {
         translateX.value = withSpring(event.translationX > 0 ? 500 : -500, {}, () => {
+          runOnJS(handleSwipe)();
           runOnJS(handleSwipe)(profiles[0].id);
-          translateX.value = 0; // Reset the position for the next card
-          translateY.value = 0; // Reset Y position
         });
       } else {
         translateX.value = withSpring(0);
@@ -46,7 +54,7 @@ export default function HomeScreen() {
 
   return (
     <View style={styles.container}>
-      {profiles.map((profile, index) => (
+      {profiles.slice(0, 2).map((profile, index) => (
         <View key={profile.id} style={[styles.cardContainer, { zIndex: profiles.length - index }]}>
           {index === 0 ? (
             <GestureDetector gesture={swipeGesture}>
@@ -56,7 +64,7 @@ export default function HomeScreen() {
               </Animated.View>
             </GestureDetector>
           ) : (
-            <View style={[styles.card, styles.card]}>
+            <View style={styles.card}>
               <Image source={{ uri: profile.image }} style={styles.image} />
               <Text style={styles.name}>{profile.name}</Text>
             </View>
@@ -97,13 +105,9 @@ const styles = StyleSheet.create({
     shadowRadius: 5,
     elevation: 5,
     position: 'absolute',
-    // marginTop: '2%',
     top: 13,
     left: 0,
   },
-  // cardOffset: {
-  //   zIndex: -1,
-  // },
   image: {
     width: '100%',
     height: '100%',
