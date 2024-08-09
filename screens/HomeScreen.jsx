@@ -57,7 +57,7 @@ export default function HomeScreen() {
       setCards([...initialCards]); // Reload cards (you can also load a different set of cards)
       setCardIndex(0);
       setLoading(false); // Hide loading indicator
-    }, 1000); // Simulate a delay for loading
+    }, 500); // Simulate a delay for loading
   }, []);
 
   const handleSwipeLeft = useCallback(() => {
@@ -93,7 +93,7 @@ export default function HomeScreen() {
           />
           <View style={styles.buttonContainer}>
             <TouchableOpacity onPress={handleSwipeLeft} style={[styles.button, styles.leftButton]}>
-              <Image source={{ uri: 'https://cdn-icons-png.flaticon.com/512/2976/2976286.png' }} style={styles.leftButtonImage} />
+              <Image source={{ uri: 'https://cdn-icons-png.flaticon.com/512/17425/17425197.png' }} style={styles.leftButtonImage} />
             </TouchableOpacity>
             <TouchableOpacity onPress={handleSwipeRight} style={[styles.button, styles.rightButton]}>
               <Image source={{ uri: 'https://cdn-icons-png.flaticon.com/512/1077/1077086.png' }} style={styles.rightButtonImage} />
@@ -183,19 +183,19 @@ const styles = StyleSheet.create({
   leftButtonImage: {
     width: 35,
     height: 35,
-    tintColor: '#cfcacb',
+    tintColor: '#FF5252',
   },
   rightButtonImage: {
     width: 35,
     height: 35,
-    tintColor: '#ff2b4f',
+    tintColor: '#4CAF50',
   },
   leftButton: {
     backgroundColor: '#474747',
-    // opacity: 0.5,
+    opacity: 0.9,
   },
   rightButton: {
     backgroundColor: '#474747',
-    // opacity: 0.5,
+    opacity: 0.9,
   },
 });
